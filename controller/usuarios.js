@@ -1,13 +1,13 @@
 var Usuarios = require("../model/usuario");
 
 exports.buscarUm = (req, res, next) => {
-    var id = req.params.usuario_id;
+    var id = req.params.id;
     Usuarios.findById(id)
         .then(Usuarios => {
             if (Usuarios) {
-                response.send(Usuarios);
+                res.send(Usuarios);
             } else {
-                response.status(404).send();
+                res.status(404).send();
             }
         })
         .catch(error => next(error));
@@ -34,49 +34,33 @@ exports.criarUsuario = (request, response, next) => {
         usuario: usuario,
         senha: senha
     }).then(() => {
+        response.json("Usuário criado com sucesso!");
         response.status(201).send();
     }).catch((error) => next(error))
 };
 
 exports.alterarUsuario = (request, response, next) => {
-    const usuario = request.body.usuario;
-    const senha = request.body.senha;
 
-    Usuarios.findById(id)
-        .then(Usuarios => {
-            if (Usuarios) {
-                Usuarios.update(
-                    {
-                        usuario: usuario,
-                        senha: senha
-                    },
-                    { where: { usuario_id: id } }
-                ).then(() => {
-                    response.status(200).send();
-                })
-                    .catch(error => next(error));
-            } else {
-                response.status(404).send();
-            }
-        })
+    Usuarios.update(request.body, {
+        where: {
+            usuario_id: request.body.usuario_id
+        }
+    }).then(() => {
+        response.json("Usuario editado com sucesso!");
+        response.status(200).send();
+    })
         .catch(error => next(error));
 };
 
 exports.deletarUsuario = (request, response, next) => {
-    const id = request.body.id;
+    const id = request.params.id;
 
-    Usuarios.findById(id)
-        .then(Usuarios => {
-            if (Usuarios) {
-                Usuarios.destroy(
-                    { where: { usuario_id: id } }
-                ).then(() => {
-                    response.status(200).send();
-                })
-                    .catch(error => next(error));
-            } else {
-                response.status(404).send();
-            }
-        })
+    Usuarios.destroy({
+        force: true,
+        where: { usuario_id: id }
+    }).then(() => {
+        response.json("Usuario deletado com sucesso!");
+        response.status(200).send().re;
+    })
         .catch(error => next(error));
 };

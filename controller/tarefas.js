@@ -3,7 +3,7 @@ var User = require("../model/usuario");
 
 exports.buscarUm = (request, response, next) => {
 
-    var id = request.body.id;
+    var id = request.params.id;
     Tarefas.findById(id)
         .then(Tarefas => {
             if (Tarefas) {
@@ -53,12 +53,16 @@ exports.criar = (req, res, next) => {
 exports.deletarTarefa = (req, res, next) => {
 
     Tarefas.destroy({
+        force: true,
         where: {
             id: req.params.id,
-            user_id: req.user.id
+            usuario_id: req.body.usuario_id
         }
     })
-        .then(result => res.sendStatus(204))
+        .then(result =>{
+            res.json("Tarefa deletada com sucesso!");
+            res.status(200);
+        })
         .catch(error => {
             res.status(412).json({ msg: error.message });
         });
@@ -68,11 +72,14 @@ exports.alterarTarefa = (req, res, next) => {
 
     Tarefas.update(req.body, {
         where: {
-            id: req.params.id,
-            user_id: req.user.id
+            id: req.body.id,
+            usuario_id: req.body.usuario_id
         }
     })
-        .then(result => res.sendStatus(204))
+        .then(result => {
+            res.json("Tarefa editada com sucesso!");
+            res.status(200);
+        })
         .catch(error => {
             res.status(412).json({ msg: error.message });
         });

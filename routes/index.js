@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 });
 
 // TAREFAS
-router.get('/tarefa', auth.checkToken, ctlrTarefas.buscarTodos);
+router.get('/tarefa/todos/:id', auth.checkToken, ctlrTarefas.buscarTodos);
 router.post('/tarefa', auth.checkToken, ctlrTarefas.criar);
 
 router.get('/tarefa/:id', auth.checkToken, ctlrTarefas.buscarUm);
