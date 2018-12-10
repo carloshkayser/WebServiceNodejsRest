@@ -19,7 +19,11 @@ router.get('/tarefa', auth.checkToken, function (req, res, next) {
 // Buscar todas as tarefas do usuario logado
 router.get('/tarefa/todos/:id', auth.checkToken, ctlrTarefas.buscarTodos);
 
+// Cria tarefas
 router.post('/tarefa/criar', auth.checkToken, ctlrTarefas.criar);
+
+// Deleta tarefas
+router.delete('/tarefa/delete/:id', auth.checkToken, ctlrTarefas.deletarTarefa);
 
 // ..:: TOKEN ::.. 
 // Auntenticar usuario

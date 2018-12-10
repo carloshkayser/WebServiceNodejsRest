@@ -35,3 +35,31 @@ exports.criar = (req, res, next) => {
             res.status(500).json({ msg: error.message });
         });
 };
+
+exports.deletarTarefa = (req, res, next) => {
+
+    Tarefas.destroy({
+        where: {
+            id: req.params.id,
+            user_id: req.user.id
+        }
+    })
+        .then(result => res.sendStatus(204))
+        .catch(error => {
+            res.status(412).json({ msg: error.message });
+        });
+};
+
+exports.alterarTarefa = (req, res, next) => {
+
+    Tarefas.update(req.body, {
+        where: {
+            id: req.params.id,
+            user_id: req.user.id
+        }
+    })
+        .then(result => res.sendStatus(204))
+        .catch(error => {
+            res.status(412).json({ msg: error.message });
+        });
+};
