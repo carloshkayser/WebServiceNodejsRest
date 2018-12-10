@@ -1,6 +1,20 @@
 var Tarefas = require("../model/tarefa");
 var User = require("../model/usuario");
 
+exports.buscarUm = (request, response, next) => {
+
+    var id = request.body.id;
+    Tarefas.findById(id)
+        .then(Tarefas => {
+            if (Tarefas) {
+                response.send(Tarefas);
+            } else {
+                response.status(404).send();
+            }
+        })
+        .catch(error => next(error));
+};
+
 exports.buscarTodos = (req, res, next) => {
 
     Tarefas.findAll({

@@ -1,33 +1,36 @@
 var express = require("express");
 var jwt = require("jwt-simple");
 var auth = require("../controller/auntenticacao");
-var ctlrTarefas = require("../controller/tarefas");
 var cfg = require("../config/config");
 var Usuario = require("../model/usuario");
-// var auth = require("../auth.js");
 var router = express.Router();
+
+// Camada de controle
+var ctlrTarefas = require("../controller/tarefas");
+var ctlrUsuarios = require("../controller/usuarios");
 
 router.get('/', function (req, res, next) {
     res.render('index', { title: 'You are in api page' });
 });
 
-// .:: TAREFAS ::.
-router.get('/tarefa', auth.checkToken, function (req, res, next) {
-    res.json("Chamou!");
-});
+// TAREFAS
+router.get('/tarefa', auth.checkToken, ctlrTarefas.buscarTodos);
+router.post('/tarefa', auth.checkToken, ctlrTarefas.criar);
 
-// Buscar todas as tarefas do usuario logado
-router.get('/tarefa/todos/:id', auth.checkToken, ctlrTarefas.buscarTodos);
+router.get('/tarefa/:id', auth.checkToken, ctlrTarefas.buscarUm);
+router.put('/tarefa/:id', auth.checkToken, ctlrTarefas.alterarTarefa);
+router.delete('/tarefa/:id', auth.checkToken, ctlrTarefas.deletarTarefa);
 
-// Cria tarefas
-router.post('/tarefa/criar', auth.checkToken, ctlrTarefas.criar);
+// USUARIOS
+router.post('/usuario', auth.checkToken, ctlrUsuarios.criarUsuario);
 
-// Deleta tarefas
-router.delete('/tarefa/delete/:id', auth.checkToken, ctlrTarefas.deletarTarefa);
+router.get('/usuario/:id', auth.checkToken, ctlrUsuarios.buscarUm);
+router.put('/usuario/:id', auth.checkToken, ctlrUsuarios.alterarUsuario);
+router.delete('/usuario/:id', auth.checkToken, ctlrUsuarios.deletarUsuario);
 
 // ..:: TOKEN ::.. 
 // Auntenticar usuario
-router.post('/token', function (req, res) {
+router.post('/login', function (req, res) {
     if (req.body.usuario && req.body.senha) {
         var usuario = req.body.usuario;
         var senha = req.body.senha;
