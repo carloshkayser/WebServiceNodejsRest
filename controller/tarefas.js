@@ -20,14 +20,18 @@ exports.criar = (req, res, next) => {
 
     console.log('Criando nova tarefa!');
 
-    // Tarefas.create({
-
-    // })
-    //     .then(result => {
-    //         res.json(result); // Transforma para Json e manda no response
-    //     })
-    //     // Caso ocorra algum erro durante o processo
-    //     .catch(error => {
-    //         res.status(412).json({ msg: error.message });
-    //     });
+    Tarefas.create({
+        titulo: req.body.titulo,
+        descricao: req.body.descricao,
+        feita: req.body.feita,
+        usuario_id: req.body.usuario_id
+    })
+        .then(result => {
+            res.json("Tarefa criada com sucesso!");
+            res.status(200);
+        })
+        // Caso ocorra algum erro durante o processo
+        .catch(error => {
+            res.status(500).json({ msg: error.message });
+        });
 };

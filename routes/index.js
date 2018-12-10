@@ -1,9 +1,10 @@
 var express = require("express");
 var jwt = require("jwt-simple");
+var auth = require("../controller/auntenticacao");
 var ctlrTarefas = require("../controller/tarefas");
 var cfg = require("../config/config");
 var Usuario = require("../model/usuario");
-var auth = require("../auth.js")();
+// var auth = require("../auth.js");
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
@@ -11,10 +12,14 @@ router.get('/', function (req, res, next) {
 });
 
 // .:: TAREFAS ::.
-router.get('/tarefa/criar', auth.authenticate(), ctlrTarefas.buscarTodos);
+router.get('/tarefa', auth.checkToken, function (req, res, next) {
+    res.json("Chamou!");
+});
 
 // Buscar todas as tarefas do usuario logado
-router.get('/tarefa/todos/:id', auth.authenticate(), ctlrTarefas.buscarTodos);
+router.get('/tarefa/todos/:id', auth.checkToken, ctlrTarefas.buscarTodos);
+
+router.post('/tarefa/criar', auth.checkToken, ctlrTarefas.criar);
 
 // ..:: TOKEN ::.. 
 // Auntenticar usuario

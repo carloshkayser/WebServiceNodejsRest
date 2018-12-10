@@ -12,25 +12,25 @@ module.exports = app => {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
   };
   const strategy = new Strategy(params, (payload, done) => {
-      Users.findById(payload.id)
-        .then(user => {
-          if (user) {
-            return done(null, {
-              id: user.id,
-              email: user.email
-            });
-          }
-          return done(null, false);
-        })
-        .catch(error => done(error, null));
-    });
+    Users.findById(payload.id)
+      .then(user => {
+        if (user) {
+          return done(null, {
+            id: user.id,
+            email: user.email
+          });
+        }
+        return done(null, false);
+      })
+      .catch(error => done(error, null));
+  });
   passport.use(strategy);
   return {
-    initialize: function() {
+    initialize: function () {
       return passport.initialize();
     },
     authenticate: function() {
-      return passport.authenticate("jwt", cfg.jwtConfig.jwtSession);
+      return passport.authenticate('jwt', cfg.jwtConfig.jwtSession);
     }
   };
 };
