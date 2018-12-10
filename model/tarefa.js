@@ -23,8 +23,11 @@ const Tarefa = sequelize.define("tarefa", {
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false
+    },
+    usuario_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
     }
-
-    // TODO // Adicionar estrangeira de usuario na tarefa
 });
+
 module.exports = Tarefa;

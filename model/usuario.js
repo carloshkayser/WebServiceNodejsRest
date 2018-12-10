@@ -1,8 +1,10 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../database/database");
 
+var Tarefa = require("../model/tarefa");
+
 const Usuario = sequelize.define("usuario", {
-    id: {
+    usuario_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -23,4 +25,8 @@ const Usuario = sequelize.define("usuario", {
         }
     }
 });
+
+Usuario.hasMany(Tarefa, {foreignKey: 'usuario_id'})
+Tarefa.belongsTo(Usuario, {foreignKey:'usuario_id'})
+
 module.exports = Usuario;

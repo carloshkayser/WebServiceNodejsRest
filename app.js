@@ -1,18 +1,26 @@
-const http = require("http");
-const express = require("express");
-const database = require("./database/database");
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const createError = require('http-errors');
-const logger = require('morgan');
-const app = express();
-const router = express.Router();
+var http = require("http");
+var express = require("express");
+var database = require("./database/database");
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var createError = require('http-errors');
+var logger = require('morgan');
+var app = express();
+var router = express.Router();
 
-var Usuario = require("./model/usuario")
-var Tarefa = require("./model/tarefa")
+// Arquivo auxiliar para camada de autenticação usando JWT
+var auth = require("./auth.js")();
+app.use(auth.initialize());
 
-var indexRouter = require('./routes/index');
-var tarefasRoute = require('./routes/tarefas')
+// Camada de modelo
+var Usuario = require("./model/usuario");
+var Tarefa = require("./model/tarefa");
+
+// Rotas
+var usuarioRoute = require('./routes/usuario');
+var tokenRoute = require('./routes/token');
+var tarefasRoute = require('./routes/tarefa');
+var indexRoute = require('./routes/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,10 +32,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(3030);
+app.use(router);
 
-// Rotas das tarefas
-app.use('/', indexRouter);
-app.use('/api', tarefasRoute);
+// Rotass
+app.use('/', indexRoute);
+//app.use('/tarefa', tarefasRoute); // TODO
+//app.use('/token', tokenRoute);
+//app.use('/usuario', usuarioRoute);
 
 // Acesso ao banco de dados
 database.sync({ force: true }).then(() =>{
@@ -38,7 +49,8 @@ database.sync({ force: true }).then(() =>{
   Tarefa.create({
     titulo: 'teste',
     descricao: 'teste desc',
-    feita: false
+    feita: false,
+    usuario_id: 1
   });
 });
 
