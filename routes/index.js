@@ -9,6 +9,14 @@ var router = express.Router();
 var ctlrTarefas = require("../controller/tarefas");
 var ctlrUsuarios = require("../controller/usuarios");
 
+router.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 router.get('/', function (req, res, next) {
     res.render('index', { title: 'You are in api page' });
 });
@@ -40,7 +48,10 @@ router.post('/login', function (req, res) {
                 if (currentUser.senha === senha) {
                     var payload = { usuario_id: currentUser.usuario_id }
                     var token = jwt.encode(payload, cfg.jwtConfig.jwtSecret);
-                    res.json({ token: token });
+                    res.json({ 
+                        token: token,
+                        usuario_id: currentUser.usuario_id
+                    });
                 } else {
                     res.sendStatus(401);
                 }
