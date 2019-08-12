@@ -10,4 +10,5 @@ const database = new Sequelize(
         dialect: config.database.dialect
     }
 );
+
 module.exports = database;

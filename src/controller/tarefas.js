@@ -1,7 +1,7 @@
 var Tarefas = require("../model/tarefa");
 var User = require("../model/usuario");
 
-exports.buscarUm = (request, response, next) => {
+exports.get = (request, response, next) => {
 
     var id = request.params.id;
     Tarefas.findById(id)
@@ -15,7 +15,7 @@ exports.buscarUm = (request, response, next) => {
         .catch(error => next(error));
 };
 
-exports.buscarTodos = (req, res, next) => {
+exports.getAllTasks = (req, res, next) => {
 
     Tarefas.findAll({
         where: { usuario_id: req.params.id }
@@ -30,7 +30,7 @@ exports.buscarTodos = (req, res, next) => {
 };
 
 // Metodo para criar as tarefas
-exports.criar = (req, res, next) => {
+exports.createTask = (req, res, next) => {
 
     console.log('Criando nova tarefa!');
 
@@ -41,8 +41,7 @@ exports.criar = (req, res, next) => {
         usuario_id: req.body.usuario_id
     })
         .then(result => {
-            res.json("Tarefa criada com sucesso!");
-            res.status(200);
+            res.status(200).json(result);
         })
         // Caso ocorra algum erro durante o processo
         .catch(error => {
@@ -50,8 +49,8 @@ exports.criar = (req, res, next) => {
         });
 };
 
-exports.deletarTarefa = (req, res, next) => {
-
+exports.removeTask = (req, res, next) => {
+    // Better just apply a flag to remove
     Tarefas.destroy({
         force: true,
         where: {
@@ -60,15 +59,14 @@ exports.deletarTarefa = (req, res, next) => {
         }
     })
         .then(result =>{
-            res.json("Tarefa deletada com sucesso!");
-            res.status(200);
+            res.status(200).json(result);
         })
         .catch(error => {
             res.status(412).json({ msg: error.message });
         });
 };
 
-exports.alterarTarefa = (req, res, next) => {
+exports.updateTask = (req, res, next) => {
 
     Tarefas.update(req.body, {
         where: {
@@ -77,8 +75,23 @@ exports.alterarTarefa = (req, res, next) => {
         }
     })
         .then(result => {
-            res.json("Tarefa editada com sucesso!");
-            res.status(200);
+            res.status(200).json(result);
+        })
+        .catch(error => {
+            res.status(412).json({ msg: error.message });
+        });
+};
+
+exports.finishTask = (req, res, next) => {
+
+    Tarefas.update(req.body.feita, {
+        where: {
+            id: req.body.id,
+            usuario_id: req.body.usuario_id
+        }
+    })
+        .then(result => {
+            res.status(200).json(result);
         })
         .catch(error => {
             res.status(412).json({ msg: error.message });

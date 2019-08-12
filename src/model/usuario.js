@@ -1,9 +1,9 @@
 const Sequelize = require("sequelize");
-const sequelize = require("../database/database");
+const database = require("../database/database");
 
 var Tarefa = require("../model/tarefa");
 
-const Usuario = sequelize.define("usuario", {
+const Usuario = database.define("usuario", {
     usuario_id: {
         allowNull: false,
         autoIncrement: true,

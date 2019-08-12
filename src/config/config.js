@@ -1,11 +1,11 @@
 module.exports = {
     database: {
-        host: 'localhost',
-        port: 5534,
-        name: 'WebServiceNodejsRest',
-        dialect: 'postgres',
-        user: 'postgres',
-        password: 'postgres'
+        host: '192.168.99.100',
+        port: 3306,
+        name: 'tasks_db',
+        dialect: 'mysql',
+        user: 'root',
+        password: 'password'
     },
     jwtConfig: {
         jwtSecret: "KeySecreta",
